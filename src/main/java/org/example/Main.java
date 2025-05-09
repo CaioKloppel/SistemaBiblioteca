@@ -10,6 +10,6 @@ public class Main {
     public static void main(String[] args) throws IOException, InvocationTargetException, NoSuchMethodException, IllegalAccessException {
         Funcionario funcionario = new Funcionario("Caio", "8210", "CaioK9");
         Usuario usuario = new Usuario("Caio", "000", "CaioK9", 100);
-        usuario.alugarLivro("biblia");
+        usuario.consultarLivro();
     }
 }

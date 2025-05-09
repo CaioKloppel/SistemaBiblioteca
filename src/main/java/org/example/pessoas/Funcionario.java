@@ -1,7 +1,8 @@
 package org.example.pessoas;
 
-import org.example.jsonData.DataBiblioteca;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.example.livro.Livro;
+import org.example.util.Access;
 import org.example.util.Funcoes;
 
 import java.io.IOException;
@@ -9,7 +10,9 @@ import java.util.ArrayList;
 
 public class Funcionario extends Pessoa{
 
-    public Funcionario(String nome, String senha, String nick){
+    public Funcionario(@JsonProperty("nome") String nome,
+                       @JsonProperty("senha") String senha,
+                       @JsonProperty("nickAcesso") String nick){
         setNome(nome); setSenha(senha); setNickAcesso(nick);
     }
 
@@ -58,7 +61,7 @@ public class Funcionario extends Pessoa{
 
         if (cadastrado){
             Livro livro = new Livro(nome, autor, preco, categorias);
-            DataBiblioteca.getInstance().getDbBiblioteca().addItem(livro);
+            Access.getInstance().getDbBiblioteca().addItem(livro);
             System.out.println("Cadastro de livro " + livro.getNome() + " realizado com sucesso!");
         } else {
             System.out.println("Cadastro cancelado!");

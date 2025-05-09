@@ -1,7 +1,8 @@
 package org.example.pessoas;
 
-import org.example.jsonData.DataBiblioteca;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.example.livro.Livro;
+import org.example.util.Access;
 import org.example.util.Funcoes;
 
 import java.io.IOException;
@@ -12,13 +13,14 @@ import java.util.List;
 
 public class Usuario extends Pessoa{
     private double saldo;
-    private ArrayList<Livro> livrosAlugados;
+    private final ArrayList<Livro> livrosAlugados;
 
-    public Usuario(String nome, String senha, String nick, double saldo){
+    public Usuario(@JsonProperty("nome") String nome,
+                   @JsonProperty("senha") String senha,
+                   @JsonProperty("nickAcesso") String nick,
+                   @JsonProperty("saldo") double saldo){
         setNome(nome); setSenha(senha); setNickAcesso(nick); this.saldo = saldo; livrosAlugados = new ArrayList<>();
     }
-
-    public Usuario() {}
 
     public void addLivrosAlugado(Livro livroAlugado) {
         livrosAlugados.add(livroAlugado);
@@ -30,7 +32,7 @@ public class Usuario extends Pessoa{
 
     public void alugarLivro(String nomeLivro) throws IOException, InvocationTargetException, NoSuchMethodException, IllegalAccessException {
         boolean livroEncontrado = false;
-        List<Livro> livros = DataBiblioteca.getInstance().getDbBiblioteca().loadData();
+        List<Livro> livros = Access.getInstance().getDbBiblioteca().loadData();
         for (Livro livro : livros){
             if (livro.getNome().equals(nomeLivro) && livro.isAlugado()){
                 livroEncontrado = true;
@@ -47,7 +49,7 @@ public class Usuario extends Pessoa{
                             "\nSeu saldo atual é de: " + saldo);
                     livrosAlugados.add(livro);
                     livro.setAlugado(true);
-                    DataBiblioteca.getInstance().getDbBiblioteca().updateItem(livro.getNome(), livro);
+                    Access.getInstance().getDbBiblioteca().updateItem(livro.getNome(), livro);
                 } else {
                     System.out.println("Você não confirmou o aluguel, voltando para o menu inicial.");
                 }

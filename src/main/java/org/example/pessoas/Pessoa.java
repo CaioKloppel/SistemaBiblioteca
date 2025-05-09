@@ -1,13 +1,11 @@
 package org.example.pessoas;
 
-import org.example.jsonData.DataBiblioteca;
 import org.example.livro.Livro;
 import org.example.util.Funcoes;
-import org.example.util.Input;
+import org.example.util.Access;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 abstract class Pessoa {
@@ -49,7 +47,7 @@ abstract class Pessoa {
     }
 
     public void consultarLivro() throws IOException {
-        List<Livro> livros = DataBiblioteca.getInstance().getDbBiblioteca().loadData();
+        List<Livro> livros = Access.getInstance().getDbBiblioteca().loadData();
         String pesquisa = Funcoes.pergunta("Pesquisar livro: ").toLowerCase().trim();
         boolean encontrado = false;
         for (Livro livro : livros) {
@@ -57,7 +55,7 @@ abstract class Pessoa {
                 encontrado = true;
                 System.out.println("\nNome do livro: " + livro.getNome() +
                         "\nAutor: " + livro.getAutor() +
-                        "\nPreço: " + livro.getPreco() +
+                        "\nPreço: R$" + livro.getPreco() +
                         "\nCategorias relevantes: " + String.join(" | ", livro.getCategoria()) +
                         "\nDisponibilidade: " + (livro.isAlugado() ? "Indisponível" : "Disponível\n"));
             }
@@ -70,7 +68,7 @@ abstract class Pessoa {
     public boolean encerrarPrograma(){
         try {
             System.out.println("Encerrando programa...");
-            Input.getInstance().closeScan();
+            Access.getInstance().getScanner().close();
             TimeUnit.SECONDS.sleep(2);
         } catch (InterruptedException e){
             e.printStackTrace();

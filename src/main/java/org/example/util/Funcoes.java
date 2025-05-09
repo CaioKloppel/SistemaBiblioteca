@@ -14,12 +14,12 @@ public class Funcoes {
         while (!entrada_valida){
             System.out.print(pergunta);
             try {
-                numeroInt = Input.getInstance().scanNextInt();
-                Input.getInstance().scanNextLine();
+                numeroInt = Access.getInstance().getScanner().nextInt();
+                Access.getInstance().getScanner().nextLine();
                 entrada_valida = true;
             } catch (InputMismatchException e){
                 System.out.println("Entrada inválida, aceita apenas números inteiros!");
-                Input.getInstance().scanNextLine();
+                Access.getInstance().getScanner().nextInt();
             }
         }
 
@@ -32,14 +32,14 @@ public class Funcoes {
         while (!entrada_valida){
             System.out.print(pergunta);
             try {
-                numeroDouble = Input.getInstance().scanNextDouble();
-                Input.getInstance().scanNextLine();
+                numeroDouble = Access.getInstance().getScanner().nextDouble();
+                Access.getInstance().getScanner().nextLine();
                 if (numeroDouble < 0){
                     System.out.println("Entrada inválida, aceita apenas números positivos!");
                 } else entrada_valida = true;
             } catch (InputMismatchException e){
                 System.out.println("Entrada inválida, aceita apenas números positivos!");
-                Input.getInstance().scanNextLine();
+                Access.getInstance().getScanner().nextDouble();
             }
         }
 
@@ -47,16 +47,16 @@ public class Funcoes {
     }
     public static String perguntaComVerificacao(String pergunta, ArrayList<String> verificao){
         System.out.print(pergunta);
-        String resposta = Input.getInstance().scanNextLine();
+        String resposta = Access.getInstance().getScanner().nextLine();
         while (!verificao.contains(resposta)){
             System.out.println("Resposta incorreta, aceita somente as respostas indicadas.");
             System.out.print(pergunta);
-            resposta = Input.getInstance().scanNextLine();
+            resposta = Access.getInstance().getScanner().nextLine();
         }
         return resposta;
     }
     public static String pergunta(String pergunta){
         System.out.print(pergunta);
-        return Input.getInstance().scanNextLine();
+        return Access.getInstance().getScanner().nextLine();
     }
 }
