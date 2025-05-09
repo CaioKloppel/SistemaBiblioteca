@@ -6,7 +6,6 @@ import org.example.util.Funcoes;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Locale;
 
 public class Funcionario extends Pessoa{
 
@@ -31,10 +30,11 @@ public class Funcionario extends Pessoa{
             categorias = new ArrayList<>();
             String categoria = "";
             while (!categoria.equals("stop")){
-                categoria = Funcoes.pergunta("Adicione as categorias relacionadas ao livro (Para facilitar a busca por categoria.)\n" +
-                        "Para sair da adição de categorias digite 'stop'.\n" +
-                        "Caso deseje apagar a última Categoria digite 'remove'\n" +
-                        "Categoria: ").toLowerCase().trim();
+                categoria = Funcoes.pergunta("""
+                        Adicione as categorias relacionadas ao livro (Para facilitar a busca por categoria.)
+                        Para sair da adição de categorias digite 'stop'.
+                        Caso deseje apagar a última Categoria digite 'remove'
+                        Categoria:\s""").toLowerCase().trim();
                 if (categorias.contains(categoria)){
                     System.out.println("Você já adicionou essa categoria!");
                 } else if (categoria.equals("remove") && !categorias.isEmpty()){

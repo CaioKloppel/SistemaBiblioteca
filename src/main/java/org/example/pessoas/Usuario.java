@@ -41,7 +41,7 @@ public class Usuario extends Pessoa{
                 String resposta = Funcoes.perguntaComVerificacao("O livro está disponivel!\nConfirme o aluguel do livro (y) ou caso desista (n): ", new ArrayList<>(Arrays.asList("y", "n")));
                 if (resposta.equals("y")){
                     saldo -= livro.getPreco();
-                    System.out.println("Você finalizou o aluguel do livro " + livro.getNome() + " de " + livro.getAutor() + "!" +
+                    System.out.println("Você finalizou o aluguel do livro " + livro.getNome() + " do autor " + livro.getAutor() + "!" +
                             "\nAgora ele é seu!" +
                             "\nValor descontado de seu saldo: " + livro.getPreco() +
                             "\nSeu saldo atual é de: " + saldo);

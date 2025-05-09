@@ -1,24 +1,27 @@
 package org.example.livro;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class Livro {
-    private String nome;
-    private String autor;
-    private ArrayList<String> categoria;
+    private final String nome;
+    private final String autor;
+    private final ArrayList<String> categoria;
     private double preco;
     private boolean alugado;
 
-
-    public Livro(String nome, String autor, double preco, ArrayList<String> categorias){
+    @JsonCreator
+    public Livro(@JsonProperty("nome") String nome,
+                 @JsonProperty("autor") String autor,
+                 @JsonProperty("preco") double preco,
+                 @JsonProperty("categorias") ArrayList<String> categorias){
         this.nome = nome;
         this.autor = autor;
         this.preco = preco;
         categoria = categorias;
     }
-
-    public Livro(){}
 
     public String getNome() {
         return nome;
