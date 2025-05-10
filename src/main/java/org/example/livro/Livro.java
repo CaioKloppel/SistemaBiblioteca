@@ -9,6 +9,7 @@ public class Livro {
     private final String nome;
     private final String autor;
     private final ArrayList<String> categoria;
+    private int quantidadeDisponivel;
     private double preco;
     private boolean alugado;
 
@@ -16,10 +17,12 @@ public class Livro {
     public Livro(@JsonProperty("nome") String nome,
                  @JsonProperty("autor") String autor,
                  @JsonProperty("preco") double preco,
-                 @JsonProperty("categorias") ArrayList<String> categorias){
+                 @JsonProperty("categorias") ArrayList<String> categorias,
+                 @JsonProperty("quantidadeDisponivel") int quantidadeDisponivel) {
         this.nome = nome;
         this.autor = autor;
         this.preco = preco;
+        this.quantidadeDisponivel = quantidadeDisponivel;
         categoria = categorias;
     }
 
@@ -35,6 +38,10 @@ public class Livro {
         return categoria;
     }
 
+    public int getQuantidadeDisponivel() {
+        return quantidadeDisponivel;
+    }
+
     public double getPreco() {
         return preco;
     }
@@ -47,7 +54,13 @@ public class Livro {
         this.preco = preco;
     }
 
-    public void setAlugado(boolean alugado) {
-        this.alugado = alugado;
+    public void editQuantidade(int quantidade){
+        quantidadeDisponivel += quantidade;
+    }
+
+    public void setAlugado() {
+        if (quantidadeDisponivel < 1){
+            alugado = true;
+        }
     }
 }

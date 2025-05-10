@@ -12,6 +12,7 @@ abstract class Pessoa {
     private String nome;
     private String nickAcesso;
     private String senha;
+    private String email;
 
 
     public String getNome() {
@@ -26,6 +27,10 @@ abstract class Pessoa {
         return senha;
     }
 
+    public String getEmail() {
+        return email;
+    }
+
     void setNome(String nome) {
         this.nome = nome;
     }
@@ -38,12 +43,25 @@ abstract class Pessoa {
         this.senha = senha;
     }
 
+    void setEmail(String email) {
+        this.email = email;
+        while (!this.email.contains("@")) {
+            System.out.println("Email incorreto, digite novamente: ");
+            this.email = Access.getInstance().getScanner().nextLine();
+        }
+    }
+
+
     public void changeNickAcesso(String nickAcesso){
-        this.nickAcesso = nickAcesso;
+        setNickAcesso(nickAcesso);
     }
 
     public void changeSenha(String senha){
-        this.senha = senha;
+        setSenha(senha);
+    }
+
+    public void changeEmail(String email){
+        setEmail(email);
     }
 
     public void consultarLivro() throws IOException {
@@ -51,10 +69,10 @@ abstract class Pessoa {
         String pesquisa = Funcoes.pergunta("Pesquisar livro: ").toLowerCase().trim();
         boolean encontrado = false;
         for (Livro livro : livros) {
-            if (livro.getNome().equals(pesquisa) || livro.getAutor().equals(pesquisa) || livro.getCategoria().contains(pesquisa)) {
+            if (livro.getNome().contains(pesquisa) || livro.getAutor().contains(pesquisa) || livro.getCategoria().contains(pesquisa)) {
                 encontrado = true;
-                System.out.println("\nNome do livro: " + livro.getNome() +
-                        "\nAutor: " + livro.getAutor() +
+                System.out.println("\nNome do livro: " + livro.getNome().toUpperCase() +
+                        "\nAutor: " + livro.getAutor().toUpperCase() +
                         "\nPreço: R$" + livro.getPreco() +
                         "\nCategorias relevantes: " + String.join(" | ", livro.getCategoria()) +
                         "\nDisponibilidade: " + (livro.isAlugado() ? "Indisponível" : "Disponível\n"));

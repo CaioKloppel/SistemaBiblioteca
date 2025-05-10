@@ -6,7 +6,10 @@ import org.example.util.Access;
 import org.example.util.Funcoes;
 
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class Funcionario extends Pessoa{
 
@@ -17,18 +20,25 @@ public class Funcionario extends Pessoa{
     }
 
     public void addLivro() throws IOException {
+        List<Livro> livros = Access.getInstance().getDbBiblioteca().loadData();
         String nome = null;
         String autor = null;
         ArrayList<String> categorias = new ArrayList<>();
         double preco = 0;
+        int quantidade = 0;
         boolean cadastrado = false;
         boolean interromperOperacao = false;
 
         while (!interromperOperacao){
             System.out.println("CASO DESEJE ENCERRAR A OPERAÇÃO, DIGITE SUA SENHA.");
-            nome = Funcoes.pergunta("Nome do livro: ").toLowerCase().trim();
+            nome = Funcoes.pergunta("Título do livro (Não poderá ser editado futuramente): ").toLowerCase().trim();
+            for (Livro livro : livros){
+                while (livro.getNome().equals(nome)){
+                    nome = Funcoes.pergunta("Este título já consta em nossa biblioteca.\nForneça outro título ou digite sua senha para encerrar a operação de cadastro: ");
+                }
+            }
             if (getSenha().equals(nome)){interromperOperacao = true; continue;}
-            autor = Funcoes.pergunta("Autor do livro: ").toLowerCase().trim();
+            autor = Funcoes.pergunta("Autor do livro (Não poderá ser editado futuramente): ").toLowerCase().trim();
             if (getSenha().equals(autor)){interromperOperacao = true; continue;}
             categorias = new ArrayList<>();
             String categoria = "";
@@ -55,17 +65,62 @@ public class Funcionario extends Pessoa{
             }
             if (getSenha().equals(categoria)){continue;}
             preco = Funcoes.getValorMonetario("Preço do livro: ");
+            quantidade = Funcoes.getInt("Quantidade de Livros: ");
             interromperOperacao = true;
             cadastrado = true;
         }
 
         if (cadastrado){
-            Livro livro = new Livro(nome, autor, preco, categorias);
+            Livro livro = new Livro(nome, autor, preco, categorias, quantidade);
             Access.getInstance().getDbBiblioteca().addItem(livro);
             System.out.println("Cadastro de livro " + livro.getNome() + " realizado com sucesso!");
         } else {
             System.out.println("Cadastro cancelado!");
         }
+    }
 
+    public void editLivro() throws IOException, InvocationTargetException, NoSuchMethodException, IllegalAccessException {
+        List<Livro> livros = Access.getInstance().getDbBiblioteca().loadData();
+        String livroBusca = Funcoes.pergunta("Qual livro você gostaria de editar as informações: ");
+        boolean encontrado = false;
+        for (Livro livro : livros){
+            if (livro.getNome().equals(livroBusca)){
+                encontrado = true;
+                String alteracao = Funcoes.perguntaComVerificacao("Qual alteração você gostaria de fazer ['preço', 'categoria', 'quantidade']: ", new ArrayList<>(Arrays.asList("preco", "categoria", "quantidade")));
+                if (alteracao.equals("preço")){
+                    System.out.println("Preço atual: R$" + livro.getPreco());
+                    double novoPreco = Funcoes.getValorMonetario("Novo preço: ");
+                    livro.changePreco(novoPreco);
+                    System.out.println("Preço alterado com sucesso. Preço atual: R$" + livro.getPreco());
+                } else if (alteracao.equals("categoria")){
+                    System.out.println("Categorias atuais: " + String.join(" | ", livro.getCategoria()));
+                    String addOrRemove = Funcoes.perguntaComVerificacao("Você deseja adicionar ou remover uma categoria['add' or 'rm']: ", new ArrayList<>(Arrays.asList("add", "rm")));
+                    if (addOrRemove.equals("add")){
+                        String novaCategoria = Funcoes.pergunta("Qual nova categoria você gostaria de adicionar: ");
+                        livro.getCategoria().add(novaCategoria);
+                        System.out.println("Categoria adicionada com sucesso.");
+                    }else{
+                        String rmCategoria = Funcoes.perguntaComVerificacao("Qual categoria você gostaria de remover: ", livro.getCategoria());
+                        livro.getCategoria().remove(rmCategoria);
+                        System.out.println("Categoria removida com sucesso");
+                    }
+                }else{
+                    System.out.println("Quantidade de livros disponíveis em estoque: " + livro.getQuantidadeDisponivel());
+                    int adicao = Funcoes.getInt("Digite o número de livros desse título que gostaria de adicionar ou remover: ");
+                    if (adicao + livro.getQuantidadeDisponivel() >= 0){
+                        if (adicao < 0){
+                            livro.editQuantidade(adicao);
+                            System.out.println("Quantidade removida: " + adicao * -1 + "\nQuantidade de livros disponíveis atual: " + livro.getQuantidadeDisponivel());
+                        } else {
+                            livro.editQuantidade(adicao);
+                            System.out.println("Quantidade adicionada: " + adicao * -1 + "\nQuantidade de livros disponíveis atual: " + livro.getQuantidadeDisponivel());
+                        }
+                    }
+                } Access.getInstance().getDbBiblioteca().updateItem(livro.getNome(), livro);
+            }
+        }
+        if (!encontrado){
+            System.out.println("O livro não foi encontrado no sistema.");
+        }
     }
 }
