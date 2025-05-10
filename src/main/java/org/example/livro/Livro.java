@@ -9,6 +9,7 @@ public class Livro {
     private final String nome;
     private final String autor;
     private final ArrayList<String> categoria;
+    private int quantidadeTotal;
     private int quantidadeDisponivel;
     private double preco;
     private boolean alugado;
@@ -18,11 +19,12 @@ public class Livro {
                  @JsonProperty("autor") String autor,
                  @JsonProperty("preco") double preco,
                  @JsonProperty("categorias") ArrayList<String> categorias,
-                 @JsonProperty("quantidadeDisponivel") int quantidadeDisponivel) {
+                 @JsonProperty("quantidadeDisponivel") int quantidadeTotal) {
         this.nome = nome;
         this.autor = autor;
         this.preco = preco;
-        this.quantidadeDisponivel = quantidadeDisponivel;
+        this.quantidadeTotal = quantidadeTotal;
+        quantidadeDisponivel = quantidadeTotal;
         categoria = categorias;
     }
 
@@ -36,6 +38,10 @@ public class Livro {
 
     public ArrayList<String> getCategoria() {
         return categoria;
+    }
+
+    public int getQuantidadeTotal() {
+        return quantidadeTotal;
     }
 
     public int getQuantidadeDisponivel() {
@@ -54,13 +60,17 @@ public class Livro {
         this.preco = preco;
     }
 
-    public void editQuantidade(int quantidade){
-        quantidadeDisponivel += quantidade;
+    public void editQuantidadeTotal(int quantidade){
+        if (quantidadeTotal + quantidade < 0){
+            System.out.println("Operação impossível de ser realizada pois você não pode remover mais livros do que constam disponíveis.");
+        } else {
+            quantidadeTotal += quantidade;
+            editQuantidadeDisponivel(quantidade);
+        }
     }
 
-    public void setAlugado() {
-        if (quantidadeDisponivel < 1){
-            alugado = true;
-        }
+    public void editQuantidadeDisponivel(int quantidade){
+        quantidadeDisponivel += quantidade;
+        alugado = quantidadeDisponivel < 1;
     }
 }

@@ -10,12 +10,10 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Locale;
-import java.util.stream.Collectors;
 
 public class Usuario extends Pessoa{
     private double saldo;
-    private final ArrayList<Livro> livrosAlugados;
+    private final ArrayList<String> livrosAlugados;
 
     public Usuario(@JsonProperty("nome") String nome,
                    @JsonProperty("senha") String senha,
@@ -25,11 +23,11 @@ public class Usuario extends Pessoa{
         setNome(nome); setSenha(senha); setEmail(email); setNickAcesso(nick); this.saldo = saldo; livrosAlugados = new ArrayList<>();
     }
 
-    public void addLivrosAlugado(Livro livroAlugado) {
+    public void addLivrosAlugado(String livroAlugado) {
         livrosAlugados.add(livroAlugado);
     }
 
-    public ArrayList<Livro> getLivrosAlugados() {
+    public ArrayList<String> getLivrosAlugados() {
         return livrosAlugados;
     }
 
@@ -60,9 +58,8 @@ public class Usuario extends Pessoa{
                                 "\nAgora ele é seu!" +
                                 "\nValor descontado de seu saldo: " + livro.getPreco() +
                                 "\nSeu saldo atual é de: " + saldo);
-                        livrosAlugados.add(livro);
-                        livro.editQuantidade(-1);
-                        livro.setAlugado();
+                        livrosAlugados.add(livro.getNome());
+                        livro.editQuantidadeDisponivel(-1);
                         Access.getInstance().getDbBiblioteca().updateItem(livro.getNome(), livro);
                     } else {
                         System.out.println("Você não possui saldo suficiente para realizar o aluguel desse livro.");
@@ -74,7 +71,38 @@ public class Usuario extends Pessoa{
             }
         }
         if (!livroEncontrado){
-            System.out.println("O nome do livro que você buscou não se encotra em nosso sistema, caso tenha alguma dúvida, pode tentar buscar por categoria em nosso sistema.");
+            System.out.println("O nome do livro que você buscou não se encontra em nosso sistema, caso tenha alguma dúvida, pode tentar buscar por categoria em nosso sistema.");
+        }
+    }
+
+    public void devolverLivro() throws IOException, InvocationTargetException, NoSuchMethodException, IllegalAccessException {
+        if (livrosAlugados.isEmpty()){
+            System.out.println("Você não possui nenhum livro alugado.");
+            return;
+        }
+        List<Livro> livros = Access.getInstance().getDbBiblioteca().loadData();
+        String livroDevolvido = Funcoes.pergunta("Qual livro você gostaria de devolver: ");
+        boolean encontrado = false;
+        for (String livro : livrosAlugados){
+            if (livro.equals(livroDevolvido)){
+                encontrado = true;
+                String confirmacao = Funcoes.perguntaComVerificacao("Livro encontrado, confirme a operação com [y] ou encerre com [n]: ", new ArrayList<>(Arrays.asList("y", "n")));
+                if (confirmacao.equals("n")){
+                    System.out.println("Encerrando operação.");
+                } else {
+                    for (Livro livroAtualizado : livros){
+                        if (livroAtualizado.getNome().equals(livroDevolvido)){
+                            livroAtualizado.editQuantidadeDisponivel(+1);
+                            Access.getInstance().getDbBiblioteca().updateItem(livro, livroAtualizado);
+                        }
+                    }
+                    livrosAlugados.remove(livro);
+                    System.out.println("Livro devolvido com sucesso!");
+                }
+            }
+        }
+        if (!encontrado){
+            System.out.println("O livro não foi encontrado entre seus livros alugados!");
         }
     }
 
@@ -83,6 +111,10 @@ public class Usuario extends Pessoa{
     }
 
     public void consultarLivrosAlugados(){
-        System.out.println("Os seus livros alugados são: " + livrosAlugados.stream().map(Livro::getNome).collect(Collectors.joining(" | ")));
+        if (livrosAlugados.isEmpty()){
+            System.out.println("Você não possui nenhum livro alugado.");
+            return;
+        }
+        System.out.println("Os seus livros alugados são: " + String.join(" | ", livrosAlugados));
     }
 }

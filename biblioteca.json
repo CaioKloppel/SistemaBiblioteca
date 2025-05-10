@@ -1,1 +1,2 @@
-[{"nome":"jantar secreto","autor":"raphael montes","preco":69.9,"quantidadeDisponivel":0,"categoria":["terror","suspense","nacional"],"alugado":true},{"nome":"o vilarejo","autor":"raphael montes","preco":70.0,"quantidadeDisponivel":0,"categoria":["terror","nacional"],"alugado":false},{"nome":"teste","autor":"testador","preco":10.0,"quantidadeDisponivel":0,"categoria":["teste"],"alugado":true}]
+[{"nome":"jantar secreto","autor":"raphael montes","preco":69.9,"quantidadeDisponivel":0,"categoria":["terror","suspense","nacional"],"alugado":true},
+  {"nome":"o vilarejo","autor":"raphael montes","preco":70.0,"quantidadeDisponivel":0,"categoria":["terror","nacional"],"alugado":false}]

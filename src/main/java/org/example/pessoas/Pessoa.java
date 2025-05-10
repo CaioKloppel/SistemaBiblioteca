@@ -75,7 +75,8 @@ abstract class Pessoa {
                         "\nAutor: " + livro.getAutor().toUpperCase() +
                         "\nPreço: R$" + livro.getPreco() +
                         "\nCategorias relevantes: " + String.join(" | ", livro.getCategoria()) +
-                        "\nDisponibilidade: " + (livro.isAlugado() ? "Indisponível" : "Disponível\n"));
+                        "\nDisponibilidade: " + (livro.isAlugado() ? "Indisponível" : "Disponível\n")
+                );
             }
         }
         if (!encontrado){

@@ -19,6 +19,29 @@ public class Funcionario extends Pessoa{
         setNome(nome); setSenha(senha); setNickAcesso(nick);
     }
 
+    @Override
+    public void consultarLivro() throws IOException {
+        List<Livro> livros = Access.getInstance().getDbBiblioteca().loadData();
+        String pesquisa = Funcoes.pergunta("Pesquisar livro: ").toLowerCase().trim();
+        boolean encontrado = false;
+        for (Livro livro : livros) {
+            if (livro.getNome().contains(pesquisa) || livro.getAutor().contains(pesquisa) || livro.getCategoria().contains(pesquisa)) {
+                encontrado = true;
+                System.out.println("\nNome do livro: " + livro.getNome().toUpperCase() +
+                        "\nAutor: " + livro.getAutor().toUpperCase() +
+                        "\nPreço: R$" + livro.getPreco() +
+                        "\nCategorias relevantes: " + String.join(" | ", livro.getCategoria()) +
+                        "\nDisponibilidade: " + (livro.isAlugado() ? "Indisponível" : "Disponível\n") +
+                        "\nQuantidade total de livros: " + livro.getQuantidadeTotal() +
+                        "\nQuantidade de livros alugados: " + (livro.getQuantidadeTotal() - livro.getQuantidadeDisponivel())
+                );
+            }
+        }
+        if (!encontrado){
+            System.out.println("Não há nada correspondente a sua pesquisa em nossa biblioteca.");
+        }
+    }
+
     public void addLivro() throws IOException {
         List<Livro> livros = Access.getInstance().getDbBiblioteca().loadData();
         String nome = null;
@@ -81,7 +104,7 @@ public class Funcionario extends Pessoa{
 
     public void editLivro() throws IOException, InvocationTargetException, NoSuchMethodException, IllegalAccessException {
         List<Livro> livros = Access.getInstance().getDbBiblioteca().loadData();
-        String livroBusca = Funcoes.pergunta("Qual livro você gostaria de editar as informações: ");
+        String livroBusca = Funcoes.pergunta("Qual livro você gostaria de editar as informações: ").toLowerCase().trim();
         boolean encontrado = false;
         for (Livro livro : livros){
             if (livro.getNome().equals(livroBusca)){
@@ -109,10 +132,10 @@ public class Funcionario extends Pessoa{
                     int adicao = Funcoes.getInt("Digite o número de livros desse título que gostaria de adicionar ou remover: ");
                     if (adicao + livro.getQuantidadeDisponivel() >= 0){
                         if (adicao < 0){
-                            livro.editQuantidade(adicao);
+                            livro.editQuantidadeTotal(adicao);
                             System.out.println("Quantidade removida: " + adicao * -1 + "\nQuantidade de livros disponíveis atual: " + livro.getQuantidadeDisponivel());
                         } else {
-                            livro.editQuantidade(adicao);
+                            livro.editQuantidadeTotal(adicao);
                             System.out.println("Quantidade adicionada: " + adicao * -1 + "\nQuantidade de livros disponíveis atual: " + livro.getQuantidadeDisponivel());
                         }
                     }
@@ -121,6 +144,31 @@ public class Funcionario extends Pessoa{
         }
         if (!encontrado){
             System.out.println("O livro não foi encontrado no sistema.");
+        }
+    }
+
+    public void rmLivro() throws IOException {
+        List<Livro> livros = Access.getInstance().getDbBiblioteca().loadData();
+        String livroBusca = Funcoes.pergunta("Qual livro você gostaria de remover do sistema: ").toLowerCase().trim();
+        boolean encontrado = false;
+        for (Livro livro : livros){
+            if (livro.getNome().equals(livroBusca)){
+                encontrado = true;
+                String confirmacao = Funcoes.perguntaComVerificacao("Livro encontrado, confirme a operação com [y] ou encerre com [n]: ", new ArrayList<>(Arrays.asList("y", "n")));
+                if (confirmacao.equals("n")){
+                    System.out.println("Operação encerrada");
+                } else {
+                    if (livro.getQuantidadeTotal() == livro.getQuantidadeDisponivel()){
+                        Access.getInstance().getDbBiblioteca().removeItem(livro.getNome());
+                        System.out.println("Livro removido com sucesso.");
+                    } else {
+                        System.out.println("Não é possível retirar o livro do sistema pois ainda existem livros alugados com esse título.");
+                    }
+                }
+            }
+        }
+        if (!encontrado){
+            System.out.println("livro não encontrado em nosso sistema.");
         }
     }
 }
