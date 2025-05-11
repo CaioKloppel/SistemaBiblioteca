@@ -15,8 +15,9 @@ public class Funcionario extends Pessoa{
 
     public Funcionario(@JsonProperty("nome") String nome,
                        @JsonProperty("senha") String senha,
-                       @JsonProperty("nickAcesso") String nick){
-        setNome(nome); setSenha(senha); setNickAcesso(nick);
+                       @JsonProperty("nickAcesso") String nick,
+                       @JsonProperty("email") String email){
+        setNome(nome); setSenha(senha); setNickAcesso(nick); setEmail(email);
     }
 
     @Override
