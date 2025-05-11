@@ -1,7 +1,6 @@
 package org.example.pessoas;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import org.example.livro.Livro;
 import org.example.util.Access;
 import org.example.util.Funcoes;
 
@@ -37,7 +36,7 @@ public class Diretor extends Funcionario{
                 }
             }
             if (getSenha().equals(email)){interromperOperacao = true; continue;}
-            nick = Funcoes.pergunta("Digite a senha do usuário: ");
+            nick = Funcoes.pergunta("Digite o nick do usuário: ").toLowerCase().trim();
             for (Funcionario funcionario : funcionarios){
                 while (funcionario.getNickAcesso().equals(nick)){
                     nick = Funcoes.pergunta("Este nick já está cadastrado no sistema.\nForneça outro nick ou digite sua senha para encerrar a operação de cadastro: ");
