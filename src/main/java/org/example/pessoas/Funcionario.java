@@ -110,8 +110,8 @@ public class Funcionario extends Pessoa{
         for (Livro livro : livros){
             if (livro.getNome().equals(livroBusca)){
                 encontrado = true;
-                String alteracao = Funcoes.perguntaComVerificacao("Qual alteração você gostaria de fazer ['preço', 'categoria', 'quantidade']: ", new ArrayList<>(Arrays.asList("preco", "categoria", "quantidade")));
-                if (alteracao.equals("preço")){
+                String alteracao = Funcoes.perguntaComVerificacao("Qual alteração você gostaria de fazer ['preco', 'categoria', 'quantidade']: ", new ArrayList<>(Arrays.asList("preco", "categoria", "quantidade")));
+                if (alteracao.equals("preco")){
                     System.out.println("Preço atual: R$" + livro.getPreco());
                     double novoPreco = Funcoes.getValorMonetario("Novo preço: ");
                     livro.changePreco(novoPreco);
@@ -137,8 +137,10 @@ public class Funcionario extends Pessoa{
                             System.out.println("Quantidade removida: " + adicao * -1 + "\nQuantidade de livros disponíveis atual: " + livro.getQuantidadeDisponivel());
                         } else {
                             livro.editQuantidadeTotal(adicao);
-                            System.out.println("Quantidade adicionada: " + adicao * -1 + "\nQuantidade de livros disponíveis atual: " + livro.getQuantidadeDisponivel());
+                            System.out.println("Quantidade adicionada: " + adicao + "\nQuantidade de livros disponíveis atual: " + livro.getQuantidadeDisponivel());
                         }
+                    } else {
+                        System.out.println("Impossível remover pois todos os livros estão alugados.");
                     }
                 } Access.getInstance().getDbBiblioteca().updateItem(livro.getNome(), livro);
             }

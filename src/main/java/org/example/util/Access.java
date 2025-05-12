@@ -39,4 +39,5 @@ public final class Access {
     public JsonDatabase<Livro> getDbBiblioteca() {return dbBiblioteca;}
     public JsonDatabase<Usuario> getDbUsuarios() {return dbUsuarios;}
     public JsonDatabase<Funcionario> getDbFuncionarios() {return dbFuncionarios;}
+    public JsonDatabase<Diretor> getDbDiretor() {return dbDiretor;}
 }

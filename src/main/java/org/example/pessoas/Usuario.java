@@ -19,24 +19,23 @@ public class Usuario extends Pessoa{
                    @JsonProperty("senha") String senha,
                    @JsonProperty("nickAcesso") String nick,
                    @JsonProperty("email") String email,
-                   @JsonProperty("saldo") double saldo){
-        setNome(nome); setSenha(senha); setEmail(email); setNickAcesso(nick); this.saldo = saldo; livrosAlugados = new ArrayList<>();
+                   @JsonProperty("saldo") double saldo,
+                   @JsonProperty("livrosAlugados") ArrayList<String> livrosAlugados){
+        setNome(nome); setSenha(senha); setEmail(email); setNickAcesso(nick); this.saldo = saldo; this.livrosAlugados = livrosAlugados;
     }
 
-    public void addLivrosAlugado(String livroAlugado) {
-        livrosAlugados.add(livroAlugado);
-    }
 
     public ArrayList<String> getLivrosAlugados() {
         return livrosAlugados;
     }
 
-    public void addSaldo(double saldo){
-        this.saldo += saldo;
-    }
+    public double getSaldo() {return saldo;}
 
-    public double getSaldo() {
-        return saldo;
+    public void addSaldo(){
+        double saldo = Funcoes.getValorMonetario("Valor a ser adicionado como crédito: ");
+        this.saldo += saldo;
+        System.out.println("Saldo adicionado com sucesso!");
+        consultarSaldo();
     }
 
     public void alugarLivro() throws IOException, InvocationTargetException, NoSuchMethodException, IllegalAccessException {
@@ -57,8 +56,9 @@ public class Usuario extends Pessoa{
                         System.out.println("Você finalizou o aluguel do livro " + livro.getNome().toUpperCase() + " do autor " + livro.getAutor().toUpperCase() + "!" +
                                 "\nAgora ele é seu!" +
                                 "\nValor descontado de seu saldo: " + livro.getPreco() +
-                                "\nSeu saldo atual é de: " + saldo);
+                                "\nSeu saldo atual é de: " + saldo + "\n");
                         livrosAlugados.add(livro.getNome());
+                        consultarLivrosAlugados();
                         livro.editQuantidadeDisponivel(-1);
                         Access.getInstance().getDbBiblioteca().updateItem(livro.getNome(), livro);
                     } else {
@@ -86,7 +86,7 @@ public class Usuario extends Pessoa{
         for (String livro : livrosAlugados){
             if (livro.equals(livroDevolvido)){
                 encontrado = true;
-                String confirmacao = Funcoes.perguntaComVerificacao("Livro encontrado, confirme a operação com [y] ou encerre com [n]: ", new ArrayList<>(Arrays.asList("y", "n")));
+                String confirmacao = Funcoes.perguntaComVerificacao("Livro " + livro.toUpperCase() + " encontrado, confirme a operação com [y] ou encerre com [n]: ", new ArrayList<>(Arrays.asList("y", "n")));
                 if (confirmacao.equals("n")){
                     System.out.println("Encerrando operação.");
                 } else {
@@ -99,6 +99,7 @@ public class Usuario extends Pessoa{
                     livrosAlugados.remove(livro);
                     System.out.println("Livro devolvido com sucesso!");
                 }
+                break;
             }
         }
         if (!encontrado){
@@ -107,7 +108,7 @@ public class Usuario extends Pessoa{
     }
 
     public void consultarSaldo(){
-        System.out.println("O seu saldo atual é de R$" + saldo);
+        System.out.println("O seu saldo atual é de R$" + getSaldo());
     }
 
     public void consultarLivrosAlugados(){
@@ -115,6 +116,6 @@ public class Usuario extends Pessoa{
             System.out.println("Você não possui nenhum livro alugado.");
             return;
         }
-        System.out.println("Os seus livros alugados são: " + String.join(" | ", livrosAlugados));
+        System.out.println("Os seus livros alugados atualmente são: " + String.join(" | ", getLivrosAlugados()).toUpperCase());
     }
 }

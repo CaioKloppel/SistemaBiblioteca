@@ -18,14 +18,14 @@ public class Livro {
     public Livro(@JsonProperty("nome") String nome,
                  @JsonProperty("autor") String autor,
                  @JsonProperty("preco") double preco,
-                 @JsonProperty("categorias") ArrayList<String> categorias,
+                 @JsonProperty("categoria") ArrayList<String> categoria,
                  @JsonProperty("quantidadeDisponivel") int quantidadeTotal) {
         this.nome = nome;
         this.autor = autor;
         this.preco = preco;
         this.quantidadeTotal = quantidadeTotal;
         quantidadeDisponivel = quantidadeTotal;
-        categoria = categorias;
+        this.categoria = categoria;
     }
 
     public String getNome() {

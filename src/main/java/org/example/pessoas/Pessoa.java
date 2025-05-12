@@ -8,7 +8,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-abstract class Pessoa {
+public abstract class Pessoa {
     private String nome;
     private String nickAcesso;
     private String senha;
@@ -46,22 +46,28 @@ abstract class Pessoa {
     void setEmail(String email) {
         this.email = email;
         while (!this.email.contains("@")) {
-            System.out.println("Email incorreto, digite novamente: ");
+            System.out.println("Email incorreto, digite novamente [Necessário conter '@']: ");
             this.email = Access.getInstance().getScanner().nextLine();
         }
     }
 
 
-    public void changeNickAcesso(String nickAcesso){
-        setNickAcesso(nickAcesso);
+    public void changeNickAcesso(){
+        String novoNick = Funcoes.pergunta("Novo nick de acesso: ");
+        setNickAcesso(novoNick);
+        System.out.println("Nick de acesso atualizado com sucesso!");
     }
 
-    public void changeSenha(String senha){
-        setSenha(senha);
+    public void changeSenha(){
+        String novaSenha = Funcoes.pergunta("Nova senha: ");
+        setSenha(novaSenha);
+        System.out.println("Nova senha cadastrada com sucesso!");
     }
 
-    public void changeEmail(String email){
-        setEmail(email);
+    public void changeEmail(){
+        String novoEmail = Funcoes.pergunta("Novo email: ");
+        setEmail(novoEmail);
+        System.out.println("Novo email cadastrado com sucesso!");
     }
 
     public void consultarLivro() throws IOException {

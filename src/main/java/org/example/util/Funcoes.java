@@ -2,11 +2,8 @@ package org.example.util;
 
 import java.util.ArrayList;
 import java.util.InputMismatchException;
-import java.util.Random;
 
 public class Funcoes {
-    private static final Random random = new Random();
-
     public static int getInt(String pergunta)
     {
         int numeroInt = 0;
@@ -19,29 +16,31 @@ public class Funcoes {
                 entrada_valida = true;
             } catch (InputMismatchException e){
                 System.out.println("Entrada inválida, aceita apenas números inteiros!");
-                Access.getInstance().getScanner().nextInt();
+                Access.getInstance().getScanner().nextLine();
             }
         }
-
         return numeroInt;
     }
     public static double getValorMonetario(String pergunta)
     {
         double numeroDouble = 0;
-        boolean entrada_valida = false;
-        while (!entrada_valida){
+        boolean entradaValida = false;
+
+        do {
             System.out.print(pergunta);
             try {
                 numeroDouble = Access.getInstance().getScanner().nextDouble();
-                Access.getInstance().getScanner().nextLine();
-                if (numeroDouble < 0){
+                Access.getInstance().getScanner().nextLine(); // consome o resto da linha
+                if (numeroDouble < 0) {
                     System.out.println("Entrada inválida, aceita apenas números positivos!");
-                } else entrada_valida = true;
-            } catch (InputMismatchException e){
-                System.out.println("Entrada inválida, aceita apenas números positivos!");
-                Access.getInstance().getScanner().nextDouble();
+                } else {
+                    entradaValida = true;
+                }
+            } catch (InputMismatchException e) {
+                System.out.println("Entrada inválida, formato correto [10,99].");
+                Access.getInstance().getScanner().nextLine();
             }
-        }
+        } while (!entradaValida);
 
         return numeroDouble;
     }

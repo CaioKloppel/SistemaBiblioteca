@@ -1,0 +1,62 @@
+[
+  {
+    "nome": "Marcos Oliveira",
+    "senha": "marcos2024",
+    "nickAcesso": "marcoliv",
+    "email": "marcos.oliveira@email.com"
+  },
+  {
+    "nome": "Patrícia Mendes",
+    "senha": "patmendes",
+    "nickAcesso": "patm",
+    "email": "patricia.mendes@email.com"
+  },
+  {
+    "nome": "Rafael Torres",
+    "senha": "rafael123",
+    "nickAcesso": "raftorres",
+    "email": "rafael.torres@email.com"
+  },
+  {
+    "nome": "Simone Castro",
+    "senha": "simonec",
+    "nickAcesso": "simonecastro",
+    "email": "simone.castro@email.com"
+  },
+  {
+    "nome": "Thiago Barbosa",
+    "senha": "thiagob",
+    "nickAcesso": "thiagobarb",
+    "email": "thiago.barbosa@email.com"
+  },
+  {
+    "nome": "Vanessa Lima",
+    "senha": "vanlima2024",
+    "nickAcesso": "vanlima",
+    "email": "vanessa.lima@email.com"
+  },
+  {
+    "nome": "Eduardo Ramos",
+    "senha": "eduramos",
+    "nickAcesso": "eduramos",
+    "email": "eduardo.ramos@email.com"
+  },
+  {
+    "nome": "Larissa Souza",
+    "senha": "larissas",
+    "nickAcesso": "larisouza",
+    "email": "larissa.souza@email.com"
+  },
+  {
+    "nome": "Pedro Henrique",
+    "senha": "pedroh2024",
+    "nickAcesso": "pedroh",
+    "email": "pedro.henrique@email.com"
+  },
+  {
+    "nome": "Renata Figueiredo",
+    "senha": "renatafig",
+    "nickAcesso": "renataf",
+    "email": "renata.figueiredo@email.com"
+  }
+]

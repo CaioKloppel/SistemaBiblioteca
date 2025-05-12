@@ -87,7 +87,7 @@ public class Diretor extends Funcionario{
                 encontrado = true;
                 String senha = Funcoes.pergunta("Para confirmar a exclusão do usuário do sistema, digite sua senha: ");
                 if (senha.equals(getSenha())){
-                    Access.getInstance().getDbFuncionarios().removeItem(usuario.getNome());
+                    Access.getInstance().getDbUsuarios().removeItem(usuario.getNome());
                     System.out.println("Usuário removido do sistema.");
                 } else {
                     System.out.println("Senha incorreta, encerando operação.");
