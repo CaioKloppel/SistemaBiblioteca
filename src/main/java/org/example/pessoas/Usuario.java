@@ -81,7 +81,7 @@ public class Usuario extends Pessoa{
             return;
         }
         List<Livro> livros = Access.getInstance().getDbBiblioteca().loadData();
-        String livroDevolvido = Funcoes.pergunta("Qual livro você gostaria de devolver: ");
+        String livroDevolvido = Funcoes.pergunta("Qual livro você gostaria de devolver: ").toLowerCase().trim();
         boolean encontrado = false;
         for (String livro : livrosAlugados){
             if (livro.equals(livroDevolvido)){
